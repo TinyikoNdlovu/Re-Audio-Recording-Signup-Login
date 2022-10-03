@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 
-import { authentication } from '../components/firebaseConfig'
+import { authentication } from "../components/firebaseConfig";
 
 const Signup = () => {
     const navigation = useNavigation()

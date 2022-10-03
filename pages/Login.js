@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 
-import { authentication } from '../components/firebaseConfig'
+import GoogleButton from 'react-google-button'
+import { signInWithPopup } from "firebase/auth";
+import { authentication, provider } from '../components/firebaseConfig'
 
 const Login = () => {
     const navigation = useNavigation()
@@ -39,6 +41,34 @@ const SignInUser = () => {
       });
   }
 
+  function googleSignUp () {
+    signInWithPopup(authentication, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    // const credential = GoogleAuthProvider.credentialFromResult(result);
+    // const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+
+    // name = user.displayName
+    //email = user.email
+    //photo = user.photoURL
+    alert(user.email);
+    navigation.navigate('Dashboard')
+
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    console.log(errorMessage);
+    // ...
+  });
+  }
+
     return (
         <View style={styles.container}>
             <Text style={{fontWeight: 'bold', fontSize: 26}}>Login</Text>
@@ -62,6 +92,7 @@ const SignInUser = () => {
                 style={styles.button}>
                 <Text style={{fontWeight: 'bold', fontSize: 22, backgroundColor: '#004ed0'}}>Sign in</Text>
             </TouchableOpacity>
+            <GoogleButton type="dark" onClick={googleSignUp} style={styles.googleButton} />
             <TouchableOpacity
                 onPress={() => navigation.navigate('Signup')}
                 style={{marginTop: 20}}>
@@ -101,5 +132,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50,
+    },
+    googleButton: {
+        marginTop: 30,
     },
 })
